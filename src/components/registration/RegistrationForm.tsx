@@ -793,6 +793,50 @@ export function RegistrationForm({ submitPath = "/api/registrations" }: Registra
                 </label>
               )}
             </Field>
+
+            <Field
+              label="Registration and Match Fees"
+              error={touched.feeAgreement ? errors.feeAgreement : undefined}
+              required
+              className="sm:col-span-2"
+            >
+              <label className="flex items-start gap-3 rounded-xl border border-input bg-background/80 p-3.5 cursor-pointer transition-all hover:bg-accent">
+                <Checkbox
+                  checked={values.feeAgreement}
+                  onCheckedChange={(checked) => {
+                    setTouched((previousTouched) => ({ ...previousTouched, feeAgreement: true }));
+                    update("feeAgreement", Boolean(checked));
+                  }}
+                  className="mt-1"
+                />
+                <span className="text-sm text-muted-foreground">
+                  I agree to pay the registration and match fees as per the event guidelines.
+                </span>
+              </label>
+            </Field>
+
+            <Field
+              label="Team Franchise Opportunity"
+              error={touched.franchiseInterest ? errors.franchiseInterest : undefined}
+              required
+              className="sm:col-span-2"
+            >
+              <Select
+                value={values.franchiseInterest}
+                onValueChange={(value) => {
+                  setTouched((previousTouched) => ({ ...previousTouched, franchiseInterest: true }));
+                  update("franchiseInterest", value);
+                }}
+              >
+                <SelectTrigger className="h-12 rounded-xl bg-background/80">
+                  <SelectValue placeholder="Are you interested in owning a team franchise?" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="Yes, I am interested.">Yes, I am interested.</SelectItem>
+                  <SelectItem value="No, I am not interested.">No, I am not interested.</SelectItem>
+                </SelectContent>
+              </Select>
+            </Field>
           </Section>
         </div>
 
