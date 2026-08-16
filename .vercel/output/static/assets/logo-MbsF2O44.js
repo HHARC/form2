@@ -1,1 +1,0 @@
-var e=`/assets/logo-COUZz_Eu.png`;export{e as t};
