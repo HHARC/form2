@@ -6,7 +6,6 @@ import {
   type DragEvent,
   type ReactNode,
 } from "react";
-import { useNavigate } from "@tanstack/react-router";
 import { z } from "zod";
 import {
   AlertCircle,
@@ -146,7 +145,6 @@ type RegistrationFormProps = {
 };
 
 export function RegistrationForm({ submitPath = "/api/registrations" }: RegistrationFormProps) {
-  const navigate = useNavigate();
   const [values, setValues] = useState<FormState>(initial);
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [touched, setTouched] = useState<Record<string, boolean>>({});
@@ -387,7 +385,7 @@ export function RegistrationForm({ submitPath = "/api/registrations" }: Registra
       }
 
       toast.success(payload.message);
-      navigate({ to: "/thank-you" });
+      window.location.assign(payload.checkoutUrl);
     } catch (error) {
       console.error(error);
       const message =
@@ -416,7 +414,7 @@ export function RegistrationForm({ submitPath = "/api/registrations" }: Registra
               Player registration
             </div>
             <h2 className="font-display text-2xl font-extrabold tracking-tight sm:text-3xl">
-              Avengers Community League 1.0
+              The Masked Cup
             </h2>
             <p className="mt-1 text-sm text-muted-foreground">
               Complete all required player, jersey, availability, and payment agreement details.
@@ -860,9 +858,12 @@ export function RegistrationForm({ submitPath = "/api/registrations" }: Registra
           <p className="text-sm font-semibold text-foreground">For more information, contact:</p>
           <div className="mt-3 space-y-1.5 text-sm text-muted-foreground">
             <p>
-              Ravi Teja {" "}
-              <a className="font-medium text-foreground hover:text-primary" href="tel:0556086529">
-               +971 52 279 2909
+              Quaid Johar {" "}
+              <a
+                className="font-medium text-foreground hover:text-primary"
+                href="tel:+971556086529"
+              >
+                +971 55 608 6529
               </a>
             </p>
           </div>

@@ -3,7 +3,7 @@ import { useEffect, useState, type ReactNode } from "react";
 import bannerOneUrl from "@/assets/Black and Red Modern Podcast Sport LinkedIn Banner.png";
 import bannerTwoUrl from "@/assets/ChatGPT Image Jul 21, 2026, 08_10_21 PM.png";
 import bannerThreeUrl from "@/assets/Gemini_Generated_Image_v5wuawv5wuawv5wu.png";
-import logoUrl from "@/components/logo.png";
+import logoUrl from "@/assets/Designer.png";
 
 const banners = [
   { src: bannerOneUrl, alt: "Avengers Community League event banner" },
@@ -14,7 +14,7 @@ const banners = [
 export function RegistrationPageShell({ children }: { children: ReactNode }) {
   return (
     <main className="scorecard-surface relative min-h-screen overflow-x-clip bg-[var(--gradient-surface)]">
-      <div className="pointer-events-none absolute inset-x-0 top-0 h-64 bg-[linear-gradient(110deg,oklch(0.19_0.045_155),oklch(0.29_0.07_153))]" />
+      <div className="pointer-events-none absolute inset-x-0 top-0 h-64 bg-[linear-gradient(110deg,oklch(0.10_0.01_80),oklch(0.26_0.07_78))]" />
       <div className="relative w-full">
         <BannerSlideshow />
       </div>
@@ -23,15 +23,15 @@ export function RegistrationPageShell({ children }: { children: ReactNode }) {
           <div className="flex min-w-0 items-center gap-2 sm:gap-3">
             <img
               src={logoUrl}
-              alt="STRIDE tournament logo"
-              className="h-14 w-20 shrink-0 object-contain sm:h-16 sm:w-24"
+              alt="The Masked Cup logo"
+              className="h-16 w-16 shrink-0 object-contain sm:h-20 sm:w-20"
             />
             <div className="min-w-0">
-              <p className="font-display text-base font-black leading-tight tracking-tight text-primary-foreground sm:text-lg">
-                Avengers Community League 1.0
+              <p className="font-display text-base font-black leading-tight tracking-tight text-[#fff8e7] sm:text-lg">
+                The Masked Cup
               </p>
               <p className="mt-1 text-[10px] font-bold uppercase tracking-[0.14em] text-[var(--primary-glow)] sm:mt-0 sm:text-xs sm:tracking-[0.18em]">
-                Player registration
+                Play in secret. Win in glory.
               </p>
             </div>
           </div>

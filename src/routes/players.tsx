@@ -2,7 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { Download, FileDown, LoaderCircle, Minus, Settings2, X } from "lucide-react";
 import { type FormEvent, useEffect, useMemo, useState } from "react";
 
-import logoUrl from "@/components/logo.png";
+import logoUrl from "@/assets/Designer.png";
 import { type RegistrationsListResponse, type RegistrationSubmission } from "@/lib/api";
 import {
   findEligiblePlayer,
@@ -18,8 +18,8 @@ const ROSTER_STORAGE_KEY = "icl-player-roster-v1";
 export const Route = createFileRoute("/players")({
   head: () => ({
     meta: [
-      { title: "Players | Avengers Community League 1.0" },
-      { name: "description", content: "The official Avengers Community League 1.0 player gallery." },
+      { title: "Players | The Masked Cup" },
+      { name: "description", content: "The official player gallery for The Masked Cup." },
     ],
   }),
   component: PlayersPage,
@@ -186,12 +186,12 @@ function PlayersPage() {
         <div className="mx-auto flex max-w-[1500px] items-center px-5 py-4 sm:px-8 lg:px-12">
           <Link
             to="/"
-            aria-label="Avengers Community League home"
+            aria-label="The Masked Cup home"
             className="inline-flex items-center gap-3"
           >
             <img src={logoUrl} alt="" className="h-14 w-20 object-contain sm:h-16 sm:w-24" />
             <span className="hidden text-xs font-extrabold uppercase tracking-[0.22em] sm:block">
-              Avengers Community League 1.0
+              The Masked Cup
             </span>
           </Link>
         </div>
@@ -204,7 +204,7 @@ function PlayersPage() {
         <div className="mb-8 border-b-4 border-[#171719] pb-7 sm:mb-12">
           <div className="flex flex-col gap-6 sm:flex-row sm:items-end sm:justify-between">
             <h1 className="max-w-3xl font-display text-[clamp(2rem,5vw,4rem)] font-black leading-[0.94] tracking-[-0.04em]">
-              Indoor Community
+              The Masked Cup
               <br className="hidden sm:block" /> League 1.0{" "}
               <span className="text-[#c51d2b]">Players</span>
             </h1>
