@@ -39,9 +39,9 @@ function ThankYou() {
   const content = {
     checking: { icon: <Loader2 className="h-9 w-9 animate-spin" />, title: "Checking payment…", text: "Please wait while we confirm your AED 159 payment." },
     paid: { icon: <CheckCircle2 className="h-9 w-9" />, title: "Payment successful!", text: "Your registration is complete and AED 159 has been paid." },
-    unpaid: { icon: <Clock3 className="h-9 w-9" />, title: "Payment not confirmed", text: "Your registration is saved, but the AED 159 payment is still unpaid." },
-    cancelled: { icon: <XCircle className="h-9 w-9" />, title: "Payment cancelled", text: "Your registration is saved, but you did not complete the AED 159 payment." },
-    error: { icon: <Clock3 className="h-9 w-9" />, title: "Could not verify payment", text: "Please contact the organizer before paying again." },
+    unpaid: { icon: <Clock3 className="h-9 w-9" />, title: "Registration not completed", text: "Your payment was not confirmed, so your registration is not valid. Please complete the AED 159 payment to register." },
+    cancelled: { icon: <XCircle className="h-9 w-9" />, title: "Registration not completed", text: "You did not complete the AED 159 payment, so your registration has not been confirmed." },
+    error: { icon: <Clock3 className="h-9 w-9" />, title: "Registration not confirmed", text: "We could not verify your payment. Your registration is not valid until payment is confirmed. Please contact the organizer before paying again." },
   }[status];
 
   return (

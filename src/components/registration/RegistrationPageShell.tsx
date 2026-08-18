@@ -3,12 +3,14 @@ import { useEffect, useState, type ReactNode } from "react";
 import bannerOneUrl from "@/assets/Black and Red Modern Podcast Sport LinkedIn Banner.png";
 import bannerTwoUrl from "@/assets/ChatGPT Image Jul 21, 2026, 08_10_21 PM.png";
 import bannerThreeUrl from "@/assets/Gemini_Generated_Image_v5wuawv5wuawv5wu.png";
+import bannerFourUrl from "@/assets/ChatGPT Image Aug 18, 2026, 06_17_42 PM.png";
 import logoUrl from "@/assets/Designer.png";
 
 const banners = [
   { src: bannerOneUrl, alt: "Avengers Community League event banner" },
   { src: bannerTwoUrl, alt: "Avengers Community League promotional banner" },
   { src: bannerThreeUrl, alt: "Avengers Community League sponsor banner" },
+  { src: bannerFourUrl, alt: "Advertisement contact banner" },
 ];
 
 export function RegistrationPageShell({ children }: { children: ReactNode }) {

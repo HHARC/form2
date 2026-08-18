@@ -384,7 +384,9 @@ function SubmissionsPage() {
                                 : "bg-amber-500 text-black hover:bg-amber-500"
                             }
                           >
-                            {submission.paymentStatus === "paid" ? "Paid — AED 159" : "Unpaid"}
+                            {submission.paymentStatus === "paid"
+                              ? "Paid — Registered"
+                              : "Unpaid — Registration incomplete"}
                           </Badge>
                         </td>
                         <td className="whitespace-nowrap px-4 py-4 align-middle font-semibold text-primary">
@@ -512,7 +514,9 @@ function exportSubmissionsToExcel(submissions: RegistrationSubmission[]) {
       submission.availability ?? "",
       (submission.notAvailableOn ?? submission.not_available_on ?? []).join(", "),
       (submission.feeAgreement ?? submission.fee_agreement) ? "Accepted" : "",
-      submission.paymentStatus === "paid" ? "Paid - AED 159" : "Unpaid",
+      submission.paymentStatus === "paid"
+        ? "Paid - Registered"
+        : "Unpaid - Registration incomplete",
       submission.franchiseInterest ?? submission.franchise_interest ?? "",
       formatDateTime(submission.createdAt ?? submission.created_at),
       fileUrl ? "View" : "",

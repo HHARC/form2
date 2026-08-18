@@ -34,6 +34,7 @@ type RegistrationRow =
       photo_path?: string;
       original_photo_name?: string;
       created_at?: string;
+      payment_status?: "unpaid" | "paid" | "failed" | "expired";
     }
   | null
   | undefined;
@@ -209,6 +210,7 @@ async function handleRegistration(
     franchise_interest: registration.franchiseInterest,
     photo_path: photoPath,
     original_photo_name: file.name,
+    payment_status: "unpaid",
     created_at: new Date().toISOString(),
   };
 
@@ -217,7 +219,7 @@ async function handleRegistration(
 
   return json(201, {
     ok: true,
-    message: "Registration submitted successfully.",
+    message: "Details received. Registration remains incomplete until payment is confirmed.",
     registration: formatRegistration(saved),
   });
 }
@@ -304,7 +306,7 @@ async function validateRegistration(
   if (
     !["Yes, I am interested.", "No, I am not interested."].includes(registration.franchiseInterest)
   )
-    errors.franchiseInterest = "Select whether you are interested in owning a team franchise.";
+    errors.franchiseInterest = "Select whether you are interested in managing a team franchise.";
 
   if (!(photo instanceof File) || photo.size === 0) {
     errors.photo = "Upload a JPG or PNG photo under 2 MB.";
@@ -340,6 +342,7 @@ function formatRegistration(row: RegistrationRow) {
     franchiseInterest: row?.franchise_interest,
     photoPath: row?.photo_path,
     originalPhotoName: row?.original_photo_name,
+    paymentStatus: row?.payment_status ?? "unpaid",
     createdAt: row?.created_at,
   };
 }
