@@ -28,6 +28,7 @@ export type RegistrationResponse = {
     photoPath: string;
     createdAt: string;
   };
+  checkoutUrl: string;
 };
 
 export type RegistrationSubmission = {
@@ -71,6 +72,10 @@ export type RegistrationSubmission = {
   photo_url?: string | null;
   createdAt?: string;
   created_at?: string;
+  paymentStatus?: "unpaid" | "paid" | "failed" | "expired";
+  paymentAmount?: number;
+  paymentCurrency?: string;
+  paidAt?: string | null;
 };
 
 export type RegistrationsListResponse =

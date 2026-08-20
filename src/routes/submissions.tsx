@@ -30,7 +30,7 @@ import {
   type RegistrationsListResponse,
   type RegistrationSubmission,
 } from "@/lib/api";
-import logoUrl from "@/components/logo.png";
+import logoUrl from "@/assets/Designer.png";
 
 export const Route = createFileRoute("/submissions")({
   head: () => ({
@@ -56,6 +56,7 @@ const columns = [
   "Availability",
   "Not Available On",
   "Fee Agreement",
+  "Payment Status",
   "Franchise Interest",
   "Created At",
   "File",
@@ -145,7 +146,7 @@ function SubmissionsPage() {
           <Link to="/" className="flex items-center gap-3">
             <img src={logoUrl} alt="Event logo" className="h-16 w-24 shrink-0 object-contain" />
             <span className="text-2xl font-black tracking-tight text-foreground">
-              Avengers Community League 1.0
+              The Masked Cup
             </span>
           </Link>
 
@@ -265,7 +266,7 @@ function SubmissionsPage() {
           <div className="overflow-x-auto border-b-4 border-primary/20 [background:linear-gradient(to_right,var(--card)_30%,transparent),linear-gradient(to_left,var(--card)_30%,transparent)] [background-attachment:local,local]">
             <table className="w-full min-w-[2100px] border-collapse text-left text-sm">
               <caption className="sr-only">
-                Avengers Community League player registration submissions
+                The Masked Cup player registration submissions
               </caption>
               <thead>
                 <tr className="border-b border-border">
@@ -375,6 +376,19 @@ function SubmissionsPage() {
                         <td className="whitespace-nowrap px-4 py-4 align-middle text-muted-foreground">
                           {(submission.feeAgreement ?? submission.fee_agreement) ? "Accepted" : "-"}
                         </td>
+                        <td className="whitespace-nowrap px-4 py-4 align-middle">
+                          <Badge
+                            className={
+                              submission.paymentStatus === "paid"
+                                ? "bg-emerald-600 text-white hover:bg-emerald-600"
+                                : "bg-amber-500 text-black hover:bg-amber-500"
+                            }
+                          >
+                            {submission.paymentStatus === "paid"
+                              ? "Paid — Registered"
+                              : "Unpaid — Registration incomplete"}
+                          </Badge>
+                        </td>
                         <td className="whitespace-nowrap px-4 py-4 align-middle font-semibold text-primary">
                           {submission.franchiseInterest ?? submission.franchise_interest ?? "-"}
                         </td>
@@ -465,6 +479,7 @@ function getSubmissionSearchText(submission: RegistrationSubmission) {
     submission.availability,
     ...(submission.notAvailableOn ?? submission.not_available_on ?? []),
     (submission.feeAgreement ?? submission.fee_agreement) ? "Accepted" : "",
+    submission.paymentStatus ?? "unpaid",
     submission.franchiseInterest,
     submission.franchise_interest,
     formatDateTime(submission.createdAt ?? submission.created_at),
@@ -499,6 +514,9 @@ function exportSubmissionsToExcel(submissions: RegistrationSubmission[]) {
       submission.availability ?? "",
       (submission.notAvailableOn ?? submission.not_available_on ?? []).join(", "),
       (submission.feeAgreement ?? submission.fee_agreement) ? "Accepted" : "",
+      submission.paymentStatus === "paid"
+        ? "Paid - Registered"
+        : "Unpaid - Registration incomplete",
       submission.franchiseInterest ?? submission.franchise_interest ?? "",
       formatDateTime(submission.createdAt ?? submission.created_at),
       fileUrl ? "View" : "",

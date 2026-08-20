@@ -6,7 +6,6 @@ import {
   type DragEvent,
   type ReactNode,
 } from "react";
-import { useNavigate } from "@tanstack/react-router";
 import { z } from "zod";
 import {
   AlertCircle,
@@ -82,7 +81,7 @@ const schema = z
       errorMap: () => ({ message: "You must agree to the registration and match fees" }),
     }),
     franchiseInterest: z.enum(["Yes, I am interested.", "No, I am not interested."], {
-      message: "Select whether you are interested in owning a team franchise",
+      message: "Select whether you are interested in managing a team franchise",
     }),
   })
   .superRefine((values, ctx) => {
@@ -123,11 +122,11 @@ const initial: FormState = {
   preferredSleeves: "",
   availability: "",
   notAvailableOn: [],
-  feeAgreement: false,
+  feeAgreement: true,
   franchiseInterest: "",
 };
 
-const TOTAL_STEPS = 14;
+const TOTAL_STEPS = 13;
 
 type FieldStatus = "neutral" | "valid" | "error";
 
@@ -146,7 +145,6 @@ type RegistrationFormProps = {
 };
 
 export function RegistrationForm({ submitPath = "/api/registrations" }: RegistrationFormProps) {
-  const navigate = useNavigate();
   const [values, setValues] = useState<FormState>(initial);
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [touched, setTouched] = useState<Record<string, boolean>>({});
@@ -177,7 +175,6 @@ export function RegistrationForm({ submitPath = "/api/registrations" }: Registra
       completedFields +
       notAvailableComplete +
       (file ? 1 : 0) +
-      (values.feeAgreement ? 1 : 0) +
       (values.franchiseInterest ? 1 : 0)
     );
   }, [file, values]);
@@ -386,8 +383,8 @@ export function RegistrationForm({ submitPath = "/api/registrations" }: Registra
         );
       }
 
-      toast.success(payload.message);
-      navigate({ to: "/thank-you" });
+      toast.info("Details received. Complete payment to confirm your registration.");
+      window.location.assign(payload.checkoutUrl);
     } catch (error) {
       console.error(error);
       const message =
@@ -409,21 +406,56 @@ export function RegistrationForm({ submitPath = "/api/registrations" }: Registra
       <div className="pointer-events-none absolute right-0 top-0 h-44 w-44 border-b border-l border-border/50 bg-[repeating-linear-gradient(45deg,transparent_0_9px,var(--border)_10px_11px)] opacity-30" />
 
       <div className="relative min-w-0">
-        <div className="mb-8 flex flex-col gap-4 border-b border-border/70 pb-6 md:flex-row md:items-center md:justify-between">
-          <div className="min-w-0">
+        <div className="mb-8 grid gap-4 border-b border-border/70 pb-6 lg:grid-cols-[minmax(210px,0.75fr)_minmax(360px,1.45fr)_minmax(210px,0.65fr)] lg:items-stretch">
+          <div className="min-w-0 self-center">
             <div className="mb-3 inline-flex items-center gap-2 border-l-4 border-[var(--primary-glow)] bg-primary px-3 py-1.5 text-xs font-bold uppercase tracking-[0.12em] text-primary-foreground">
               <Sparkles className="h-3.5 w-3.5" />
               Player registration
             </div>
             <h2 className="font-display text-2xl font-extrabold tracking-tight sm:text-3xl">
-              Avengers Community League 1.0
+              The Masked Cup
             </h2>
             <p className="mt-1 text-sm text-muted-foreground">
-              Complete all required player, jersey, availability, and payment agreement details.
+              Complete your player details and payment to secure your place.
             </p>
           </div>
 
-          <div className="w-full min-w-0 border border-border bg-secondary/55 p-3.5 shadow-[inset_3px_0_0_var(--primary-glow)] md:w-auto md:min-w-48">
+          <section
+            aria-label="Tournament information"
+            className="min-w-0 border border-border bg-background/75 p-4 shadow-[inset_3px_0_0_var(--primary-glow)]"
+          >
+            <p className="text-sm leading-relaxed text-muted-foreground">
+              The Masked Cup is not just a cricket tournament. It&apos;s a competition where
+              identities are hidden, teams are built in secret, and every match contains a
+              strategic twist. Featuring a live Masked Draft and the innovative Mystery Player
+              Challenge, The Masked Cup brings a new level of excitement to community cricket.
+            </p>
+
+            <div className="mt-3 flex flex-wrap gap-x-4 gap-y-1 text-xs font-bold uppercase tracking-wide text-foreground sm:text-sm">
+              <span>🎭 Hidden Identities</span>
+              <span>⭐ Mystery Players</span>
+              <span>🏆 One Champion</span>
+            </div>
+
+            <div className="mt-4 grid gap-3 border-t border-border/70 pt-3 text-sm sm:grid-cols-3">
+              <div>
+                <p className="font-bold text-foreground">Dates</p>
+                <p className="mt-1 text-muted-foreground">11th Sep, 7 PM to 11 PM</p>
+                <p className="text-muted-foreground">13th Sep, 5 PM to 10 PM</p>
+              </div>
+              <div>
+                <p className="font-bold text-foreground">Divisions</p>
+                <p className="mt-1 text-muted-foreground">E and below</p>
+              </div>
+              <div>
+                <p className="font-bold text-foreground">Fees</p>
+                <p className="mt-1 font-semibold text-foreground">AED 159/- per player</p>
+                <p className="text-xs text-muted-foreground">Payable at registration</p>
+              </div>
+            </div>
+          </section>
+
+          <div className="w-full min-w-0 self-center border border-border bg-secondary/55 p-3.5 shadow-[inset_3px_0_0_var(--primary-glow)]">
             <div className="flex items-center justify-between text-xs font-medium text-muted-foreground">
               <span>Form completeness</span>
               {progressPercent === 100 ? (
@@ -795,32 +827,17 @@ export function RegistrationForm({ submitPath = "/api/registrations" }: Registra
             </Field>
 
             <Field
-              label="Registration and Match Fees"
-              error={touched.feeAgreement ? errors.feeAgreement : undefined}
-              required
-              className="sm:col-span-2"
-            >
-              <label className="flex items-start gap-3 rounded-xl border border-input bg-background/80 p-3.5 cursor-pointer transition-all hover:bg-accent">
-                <Checkbox
-                  checked={values.feeAgreement}
-                  onCheckedChange={(checked) => {
-                    setTouched((previousTouched) => ({ ...previousTouched, feeAgreement: true }));
-                    update("feeAgreement", Boolean(checked));
-                  }}
-                  className="mt-1"
-                />
-                <span className="text-sm text-muted-foreground">
-                  I agree to pay the registration and match fees as per the event guidelines.
-                </span>
-              </label>
-            </Field>
-
-            <Field
               label="Team Franchise Opportunity"
               error={touched.franchiseInterest ? errors.franchiseInterest : undefined}
               required
               className="sm:col-span-2"
             >
+              <p
+                id="franchise-interest-question"
+                className="text-sm leading-6 text-foreground"
+              >
+                Are you interested in managing a team franchise at cost of AED 350?
+              </p>
               <Select
                 value={values.franchiseInterest}
                 onValueChange={(value) => {
@@ -828,8 +845,11 @@ export function RegistrationForm({ submitPath = "/api/registrations" }: Registra
                   update("franchiseInterest", value);
                 }}
               >
-                <SelectTrigger className="h-12 rounded-xl bg-background/80">
-                  <SelectValue placeholder="Are you interested in owning a team franchise?" />
+                <SelectTrigger
+                  aria-labelledby="franchise-interest-question"
+                  className="h-12 rounded-xl bg-background/80"
+                >
+                  <SelectValue placeholder="Select an option" />
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="Yes, I am interested.">Yes, I am interested.</SelectItem>
@@ -847,7 +867,7 @@ export function RegistrationForm({ submitPath = "/api/registrations" }: Registra
             className="animate-pulse-glow h-11 w-full max-w-56 rounded-xl px-8 text-sm font-semibold shadow-[var(--shadow-glow)]"
           >
             {submitting && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-            {submitting ? "Submitting" : "Submit registration"}
+            {submitting ? "Continuing" : "Continue to payment"}
           </Button>
         </div>
 
@@ -860,9 +880,30 @@ export function RegistrationForm({ submitPath = "/api/registrations" }: Registra
           <p className="text-sm font-semibold text-foreground">For more information, contact:</p>
           <div className="mt-3 space-y-1.5 text-sm text-muted-foreground">
             <p>
-              Ravi Teja {" "}
-              <a className="font-medium text-foreground hover:text-primary" href="tel:0556086529">
-               +971 52 279 2909
+              Hussein Sancha {" "}
+              <a
+                className="font-medium text-foreground hover:text-primary"
+                href="tel:+971508759122"
+              >
+                050-8759122
+              </a>
+            </p>
+            <p>
+              Qasim Ali {" "}
+              <a
+                className="font-medium text-foreground hover:text-primary"
+                href="tel:+971507862132"
+              >
+                050-7862132
+              </a>
+            </p>
+            <p>
+              Quaid Joher {" "}
+              <a
+                className="font-medium text-foreground hover:text-primary"
+                href="tel:+971556086529"
+              >
+                055-6086529
               </a>
             </p>
           </div>
