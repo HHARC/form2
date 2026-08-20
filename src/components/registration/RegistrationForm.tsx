@@ -832,6 +832,12 @@ export function RegistrationForm({ submitPath = "/api/registrations" }: Registra
               required
               className="sm:col-span-2"
             >
+              <p
+                id="franchise-interest-question"
+                className="text-sm leading-6 text-foreground"
+              >
+                Are you interested in managing a team franchise at cost of AED 350?
+              </p>
               <Select
                 value={values.franchiseInterest}
                 onValueChange={(value) => {
@@ -839,8 +845,11 @@ export function RegistrationForm({ submitPath = "/api/registrations" }: Registra
                   update("franchiseInterest", value);
                 }}
               >
-                <SelectTrigger className="h-12 rounded-xl bg-background/80">
-                  <SelectValue placeholder="Are you interested in managing a team franchise at cost of AED 350?" />
+                <SelectTrigger
+                  aria-labelledby="franchise-interest-question"
+                  className="h-12 rounded-xl bg-background/80"
+                >
+                  <SelectValue placeholder="Select an option" />
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="Yes, I am interested.">Yes, I am interested.</SelectItem>
