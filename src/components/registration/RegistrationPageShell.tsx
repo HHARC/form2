@@ -39,6 +39,17 @@ export function RegistrationPageShell({ children }: { children: ReactNode }) {
           </div>
         </header>
         {children}
+        <footer className="mt-8 border-t border-border/70 pt-4 text-center text-sm text-muted-foreground">
+          Design and develop by{" "}
+          <a
+            href="https://www.web-wired.net/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-primary hover:underline"
+          >
+            web-wired.net
+          </a>
+        </footer>
       </div>
     </main>
   );
