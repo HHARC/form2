@@ -4,7 +4,7 @@ import { randomUUID } from "node:crypto";
 import { mkdir, readFile, stat, writeFile } from "node:fs/promises";
 import { extname, join, relative, resolve } from "node:path";
 
-import { MongoClient } from "mongodb";
+import { MongoClient, ObjectId } from "mongodb";
 
 import { consumeLastCapturedError } from "./lib/error-capture";
 import { renderErrorPage } from "./lib/error-page";
@@ -130,6 +130,21 @@ async function handleApiRequest(request: Request): Promise<Response | null> {
     const collection = await getRegistrationsCollection();
     const docs = await collection.find().sort({ _id: -1 }).limit(50).toArray();
     return json(200, { ok: true, registrations: docs.map(formatRegistration) });
+  }
+
+  if (request.method === "DELETE" && url.pathname.startsWith("/api/registrations/")) {
+    const id = decodeURIComponent(url.pathname.replace(/^\/api\/registrations\//, ""));
+    if (!ObjectId.isValid(id)) {
+      return json(404, { ok: false, message: "Submission not found." });
+    }
+
+    const collection = await getRegistrationsCollection();
+    const result = await collection.deleteOne({ _id: new ObjectId(id) });
+    if (result.deletedCount === 0) {
+      return json(404, { ok: false, message: "Submission not found." });
+    }
+
+    return json(200, { ok: true, message: "Submission deleted." });
   }
 
   if (request.method === "POST" && url.pathname === "/api/registrations") {
@@ -388,7 +403,7 @@ function json(status: number, payload: unknown) {
 function corsHeaders() {
   return {
     "access-control-allow-origin": "*",
-    "access-control-allow-methods": "GET,POST,OPTIONS",
+    "access-control-allow-methods": "GET,POST,DELETE,OPTIONS",
     "access-control-allow-headers": "Content-Type, Accept",
   };
 }

@@ -9,6 +9,7 @@ import {
   RefreshCcw,
   Search,
   TableProperties,
+  Trash2,
   X,
 } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
@@ -62,6 +63,7 @@ const columns = [
   "File",
 ];
 
+const tableColumns = [...columns, "Actions"];
 const excelColumns = [...columns, "Photo Filename Key", "File URL"];
 
 function SubmissionsPage() {
@@ -69,6 +71,7 @@ function SubmissionsPage() {
   const [searchQuery, setSearchQuery] = useState("");
   const [loading, setLoading] = useState(true);
   const [downloadingPhotos, setDownloadingPhotos] = useState(false);
+  const [deletingId, setDeletingId] = useState<string | number | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [selectedFile, setSelectedFile] = useState<{
     name: string;
@@ -118,6 +121,38 @@ function SubmissionsPage() {
       );
     } finally {
       setDownloadingPhotos(false);
+    }
+  }
+
+  async function handleDeleteSubmission(submission: RegistrationSubmission) {
+    const name = getSubmissionName(submission);
+    const confirmed = window.confirm(`Delete ${name}'s submission? This cannot be undone.`);
+    if (!confirmed) return;
+
+    setDeletingId(submission.id);
+    setError(null);
+
+    try {
+      const response = await fetch(
+        `${API_BASE_URL}/api/registrations/${encodeURIComponent(String(submission.id))}`,
+        { method: "DELETE" },
+      );
+      const payload = (await response.json().catch(() => null)) as { message?: string } | null;
+
+      if (!response.ok) {
+        throw new Error(payload?.message ?? "Could not delete this submission.");
+      }
+
+      setSubmissions((currentSubmissions) =>
+        currentSubmissions.filter((currentSubmission) => currentSubmission.id !== submission.id),
+      );
+    } catch (deleteError) {
+      console.error(deleteError);
+      setError(
+        deleteError instanceof Error ? deleteError.message : "Could not delete this submission.",
+      );
+    } finally {
+      setDeletingId(null);
     }
   }
 
@@ -270,7 +305,7 @@ function SubmissionsPage() {
               </caption>
               <thead>
                 <tr className="border-b border-border">
-                  {columns.map((column) => (
+                  {tableColumns.map((column) => (
                     <th
                       scope="col"
                       key={column}
@@ -284,7 +319,7 @@ function SubmissionsPage() {
               <tbody>
                 {loading ? (
                   <tr>
-                    <td colSpan={columns.length} className="px-6 py-16 text-center">
+                    <td colSpan={tableColumns.length} className="px-6 py-16 text-center">
                       <span className="inline-flex items-center gap-2 text-muted-foreground">
                         <Loader2 className="h-4 w-4 animate-spin" />
                         Loading submissions
@@ -294,7 +329,7 @@ function SubmissionsPage() {
                 ) : submissions.length === 0 ? (
                   <tr>
                     <td
-                      colSpan={columns.length}
+                      colSpan={tableColumns.length}
                       className="px-6 py-16 text-center text-muted-foreground"
                     >
                       No submissions found.
@@ -303,7 +338,7 @@ function SubmissionsPage() {
                 ) : filteredSubmissions.length === 0 ? (
                   <tr>
                     <td
-                      colSpan={columns.length}
+                      colSpan={tableColumns.length}
                       className="px-6 py-16 text-center text-muted-foreground"
                     >
                       No submissions match your search.
@@ -409,6 +444,22 @@ function SubmissionsPage() {
                           ) : (
                             <span className="text-muted-foreground">No file</span>
                           )}
+                        </td>
+                        <td className="whitespace-nowrap px-4 py-4 align-middle">
+                          <Button
+                            type="button"
+                            variant="outline"
+                            className="h-9 rounded-xl border-destructive/40 px-3 text-sm font-semibold text-destructive hover:bg-destructive/10"
+                            onClick={() => void handleDeleteSubmission(submission)}
+                            disabled={deletingId === submission.id}
+                          >
+                            {deletingId === submission.id ? (
+                              <Loader2 className="h-4 w-4 animate-spin" />
+                            ) : (
+                              <Trash2 className="h-4 w-4" />
+                            )}
+                            Delete
+                          </Button>
                         </td>
                       </tr>
                     );
