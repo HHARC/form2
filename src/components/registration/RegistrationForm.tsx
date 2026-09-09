@@ -441,17 +441,17 @@ export function RegistrationForm({ submitPath = "/api/registrations" }: Registra
               <div>
                 <p className="font-bold text-foreground">Dates </p>
                 <div className="mt-1 space-y-1 text-muted-foreground">
-                  <p className="flex items-start gap-2">
+                  <p className="flex items-center gap-2">
                     <span className="inline-flex min-w-10 justify-center rounded-full bg-sky-100 px-2 py-0.5 text-xs font-bold text-sky-700">
                       Sep
                     </span>
                     <span>29</span>
                   </p>
-                  <p className="flex items-start gap-2">
+                  <p className="flex items-center gap-2">
                     <span className="inline-flex min-w-10 justify-center rounded-full bg-amber-100 px-2 py-0.5 text-xs font-bold text-amber-700">
                       Oct
                     </span>
-                    <span>5,6,8,13,15,20,22,27,29</span>
+                    <span className="whitespace-nowrap">5,6,8,13,15,20,22,27,29</span>
                   </p>
                 </div>
               </div>
