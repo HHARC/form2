@@ -437,7 +437,7 @@ export function RegistrationForm({ submitPath = "/api/registrations" }: Registra
               <span>🏆 One Champion</span>
             </div>
 
-            <div className="mt-4 grid gap-3 border-t border-border/70 pt-3 text-sm sm:grid-cols-[minmax(270px,1.45fr)_minmax(120px,0.65fr)_minmax(175px,0.9fr)]">
+            <div className="mt-4 grid gap-2 border-t border-border/70 pt-3 text-sm sm:grid-cols-[1.15fr_0.8fr_1fr]">
               <div>
                 <p className="font-bold text-foreground">Dates </p>
                 <div className="mt-1 space-y-1 text-muted-foreground">
