@@ -440,10 +440,16 @@ export function RegistrationForm({ submitPath = "/api/registrations" }: Registra
             <div className="mt-4 grid gap-3 border-t border-border/70 pt-3 text-sm sm:grid-cols-3">
               <div>
                 <p className="font-bold text-foreground">Dates</p>
-                <p className="mt-1 text-muted-foreground">29th Sep 2026</p>
-                <p className="text-muted-foreground">
-                  5th, 6th, 8th, 13th, 15th, 20th, 22nd, 27th, 29th Oct 2026
-                </p>
+                <div className="mt-2 grid grid-cols-2 gap-1.5">
+                  {NOT_AVAILABLE_ON_OPTIONS.map((date) => (
+                    <span
+                      key={date}
+                      className="border border-border bg-card px-2 py-1 text-xs font-semibold text-muted-foreground"
+                    >
+                      {date}
+                    </span>
+                  ))}
+                </div>
               </div>
               <div>
                 <p className="font-bold text-foreground">Divisions</p>
