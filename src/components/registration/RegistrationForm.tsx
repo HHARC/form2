@@ -440,8 +440,10 @@ export function RegistrationForm({ submitPath = "/api/registrations" }: Registra
             <div className="mt-4 grid gap-3 border-t border-border/70 pt-3 text-sm sm:grid-cols-3">
               <div>
                 <p className="font-bold text-foreground">Dates</p>
-                <p className="mt-1 text-muted-foreground">11th Sep, 7 PM to 11 PM</p>
-                <p className="text-muted-foreground">13th Sep, 5 PM to 10 PM</p>
+                <p className="mt-1 text-muted-foreground">29th Sep 2026</p>
+                <p className="text-muted-foreground">
+                  5th, 6th, 8th, 13th, 15th, 20th, 22nd, 27th, 29th Oct 2026
+                </p>
               </div>
               <div>
                 <p className="font-bold text-foreground">Divisions</p>
@@ -449,7 +451,7 @@ export function RegistrationForm({ submitPath = "/api/registrations" }: Registra
               </div>
               <div>
                 <p className="font-bold text-foreground">Fees</p>
-                <p className="mt-1 font-semibold text-foreground">AED 159/- per player</p>
+                <p className="mt-1 font-semibold text-foreground">AED 60/- per player</p>
                 <p className="text-xs text-muted-foreground">Payable at registration</p>
               </div>
             </div>
@@ -836,7 +838,7 @@ export function RegistrationForm({ submitPath = "/api/registrations" }: Registra
                 id="franchise-interest-question"
                 className="text-sm leading-6 text-foreground"
               >
-                Are you interested in managing a team franchise at cost of AED 350?
+                Are you interested in managing a team franchise at cost of AED 500?
               </p>
               <Select
                 value={values.franchiseInterest}

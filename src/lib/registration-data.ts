@@ -5,8 +5,16 @@ export const PREFERRED_SLEEVE_OPTIONS = ["Full Sleeves", "Half Sleeves"];
 export const AVAILABILITY_OPTIONS = ["Available all matches", "Missing few matches"];
 
 export const NOT_AVAILABLE_ON_OPTIONS = [
-  "11 Sep 2026 — 19:00 onwards",
-  "13 Sep 2026 — 17:00 onwards",
+  "29 Sep 2026",
+  "05 Oct 2026",
+  "06 Oct 2026",
+  "08 Oct 2026",
+  "13 Oct 2026",
+  "15 Oct 2026",
+  "20 Oct 2026",
+  "22 Oct 2026",
+  "27 Oct 2026",
+  "29 Oct 2026",
 ];
 
 export const MAX_FILE_SIZE = 2 * 1024 * 1024;
