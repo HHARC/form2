@@ -439,11 +439,16 @@ export function RegistrationForm({ submitPath = "/api/registrations" }: Registra
 
             <div className="mt-4 grid gap-3 border-t border-border/70 pt-3 text-sm sm:grid-cols-3">
               <div>
-                <p className="font-bold text-foreground">Dates (Sep & Oct 2026)</p>
-                <p className="mt-1 text-muted-foreground">29</p>
-                <p className="text-muted-foreground">
-                  05, 06, 08, 13, 15, 20, 22, 27, 29
-                </p>
+                <p className="font-bold text-foreground">Dates </p>
+                <div className="mt-1 space-y-1 text-muted-foreground">
+                  <p>
+                    <span className="font-semibold text-foreground">Sep:</span> 29
+                  </p>
+                  <p>
+                    <span className="font-semibold text-foreground">Oct:</span> 05, 06, 08, 13,
+                    15, 20, 22, 27, 29
+                  </p>
+                </div>
               </div>
               <div>
                 <p className="font-bold text-foreground">Divisions</p>
