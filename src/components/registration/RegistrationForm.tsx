@@ -445,8 +445,8 @@ export function RegistrationForm({ submitPath = "/api/registrations" }: Registra
                     <span className="font-semibold text-foreground">Sep:</span> 29
                   </p>
                   <p>
-                    <span className="font-semibold text-foreground">Oct:</span> 05, 06, 08, 13,
-                    15, 20, 22, 27, 29
+                    <span className="font-semibold text-foreground">Oct:</span> 5,6,8,13,15,20,22,27,29
+                   
                   </p>
                 </div>
               </div>
