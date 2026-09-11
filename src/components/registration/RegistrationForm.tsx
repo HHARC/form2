@@ -457,7 +457,7 @@ export function RegistrationForm({ submitPath = "/api/registrations" }: Registra
               </div>
               <div>
                 <p className="font-bold text-foreground">Divisions</p>
-                <p className="mt-1 text-muted-foreground">E and below</p>
+                <p className="mt-1 text-muted-foreground">D and Below</p>
               </div>
               <div>
                 <p className="font-bold text-foreground">Fees</p>
