@@ -840,35 +840,6 @@ export function RegistrationForm({ submitPath = "/api/registrations" }: Registra
             </Field>
 
             <Field
-              label="Fee Agreement"
-              error={touched.feeAgreement ? errors.feeAgreement : undefined}
-              required
-              className="sm:col-span-2"
-            >
-              <label
-                className={cn(
-                  "flex cursor-pointer items-start gap-3 rounded-2xl border bg-background/80 p-4 text-sm transition-all",
-                  values.feeAgreement
-                    ? "border-primary bg-primary/5 shadow-sm ring-2 ring-primary/10"
-                    : "border-input hover:-translate-y-0.5 hover:bg-accent",
-                  touched.feeAgreement && errors.feeAgreement && "border-destructive/60",
-                )}
-              >
-                <Checkbox
-                  checked={values.feeAgreement}
-                  onCheckedChange={(checked) => {
-                    setTouched((previousTouched) => ({ ...previousTouched, feeAgreement: true }));
-                    update("feeAgreement", checked === true);
-                  }}
-                  aria-label="Agree to pay the registration fee"
-                />
-                <span className="leading-6 text-foreground">
-                  I agree to pay the AED 60 registration fee before completing payment.
-                </span>
-              </label>
-            </Field>
-
-            <Field
               label="Team Franchise Opportunity"
               error={touched.franchiseInterest ? errors.franchiseInterest : undefined}
               required
@@ -898,6 +869,35 @@ export function RegistrationForm({ submitPath = "/api/registrations" }: Registra
                   <SelectItem value="No, I am not interested.">No, I am not interested.</SelectItem>
                 </SelectContent>
               </Select>
+            </Field>
+
+            <Field
+              label="Fee Agreement"
+              error={touched.feeAgreement ? errors.feeAgreement : undefined}
+              required
+              className="sm:col-span-2"
+            >
+              <label
+                className={cn(
+                  "flex cursor-pointer items-start gap-3 rounded-2xl border bg-background/80 p-4 text-sm transition-all",
+                  values.feeAgreement
+                    ? "border-primary bg-primary/5 shadow-sm ring-2 ring-primary/10"
+                    : "border-input hover:-translate-y-0.5 hover:bg-accent",
+                  touched.feeAgreement && errors.feeAgreement && "border-destructive/60",
+                )}
+              >
+                <Checkbox
+                  checked={values.feeAgreement}
+                  onCheckedChange={(checked) => {
+                    setTouched((previousTouched) => ({ ...previousTouched, feeAgreement: true }));
+                    update("feeAgreement", checked === true);
+                  }}
+                  aria-label="Agree to pay the registration fee"
+                />
+                <span className="leading-6 text-foreground">
+                  I agree to pay the AED 60 registration fee before completing payment.
+                </span>
+              </label>
             </Field>
           </Section>
         </div>
