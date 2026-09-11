@@ -895,7 +895,7 @@ export function RegistrationForm({ submitPath = "/api/registrations" }: Registra
                   aria-label="Agree to pay the registration fee"
                 />
                 <span className="leading-6 text-foreground">
-                  I agree to pay the AED 60 registration fee before completing payment.
+                  I agree to pay AED 40 per match.
                 </span>
               </label>
             </Field>
