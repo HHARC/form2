@@ -70,9 +70,29 @@ const excelColumns = [...columns, "Photo Filename Key", "File URL"];
 const submissionsPassword = import.meta.env.VITE_SUBMISSIONS_PASSWORD || "MaskedCup2026";
 const submissionsAuthKey = "masked-cup-submissions-authenticated";
 const tableHeadClass =
-  "bg-primary px-2 py-3 text-left text-[11px] font-bold uppercase leading-tight text-primary-foreground";
+  "bg-primary px-2 py-3 text-left text-[10px] font-bold uppercase leading-tight text-primary-foreground";
 const tableCellClass =
-  "break-words px-2 py-3 align-middle text-xs leading-snug text-muted-foreground";
+  "break-words px-2 py-4 align-middle text-xs leading-snug text-muted-foreground";
+const tableColumnWidths = [
+  "5.4%",
+  "5.4%",
+  "7%",
+  "5.3%",
+  "5.3%",
+  "5%",
+  "4.6%",
+  "4.8%",
+  "5.8%",
+  "5.8%",
+  "5.8%",
+  "4.8%",
+  "5.2%",
+  "6.2%",
+  "6.6%",
+  "6.2%",
+  "4.2%",
+  "6.6%",
+];
 
 function SubmissionsPage() {
   const [password, setPassword] = useState("");
@@ -289,7 +309,7 @@ function SubmissionsPage() {
   return (
     <main className="min-h-screen bg-background">
       <header className="border-b border-border bg-card/95 px-3 py-3 shadow-sm sm:px-5">
-        <div className="mx-auto flex w-full max-w-[1600px] flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+        <div className="mx-auto flex w-full flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           <Link to="/" className="flex items-center gap-3">
             <img src={logoUrl} alt="Event logo" className="h-16 w-24 shrink-0 object-contain" />
             <span className="text-2xl font-black tracking-tight text-foreground">
@@ -308,7 +328,7 @@ function SubmissionsPage() {
         </div>
       </header>
 
-      <section className="mx-auto w-full max-w-[1600px] px-3 py-8 sm:px-5">
+      <section className="mx-auto w-full px-3 py-8 sm:px-5">
         <div className="flex flex-col gap-5 border-b border-border pb-8 sm:flex-row sm:items-end sm:justify-between">
           <div>
             <div className="mb-4 flex items-center gap-3 text-sm font-semibold text-foreground">
@@ -410,9 +430,14 @@ function SubmissionsPage() {
             </div>
           </div>
 
-          <div className="hidden border-b-4 border-primary/20 lg:block">
+          <div className="hidden border-b-4 border-primary/20 2xl:block">
             <table className="w-full table-fixed border-collapse text-left">
               <caption className="sr-only">The Masked Cup player registration submissions</caption>
+              <colgroup>
+                {tableColumnWidths.map((width, index) => (
+                  <col key={`${width}-${index}`} style={{ width }} />
+                ))}
+              </colgroup>
               <thead>
                 <tr className="border-b border-border">
                   {tableColumns.map((column) => (
@@ -515,8 +540,8 @@ function SubmissionsPage() {
                           <Badge
                             className={
                               submission.paymentStatus === "paid"
-                                ? "bg-emerald-600 text-white hover:bg-emerald-600"
-                                : "bg-amber-500 text-black hover:bg-amber-500"
+                                ? "whitespace-normal bg-emerald-600 text-[11px] leading-tight text-white hover:bg-emerald-600"
+                                : "whitespace-normal bg-amber-500 text-[11px] leading-tight text-black hover:bg-amber-500"
                             }
                           >
                             {submission.paymentStatus === "paid"
@@ -535,7 +560,7 @@ function SubmissionsPage() {
                             <Button
                               type="button"
                               variant="ghost"
-                              className="h-8 rounded-lg px-2 text-xs font-semibold"
+                              className="h-8 rounded-lg px-1.5 text-xs font-semibold"
                               onClick={() => setSelectedFile({ name: displayName, url: fileUrl })}
                             >
                               <Eye className="h-4 w-4" />
@@ -551,7 +576,7 @@ function SubmissionsPage() {
                               <Button
                                 type="button"
                                 variant="outline"
-                                className="h-8 rounded-lg border-emerald-600/40 px-2 text-xs font-semibold text-emerald-700 hover:bg-emerald-50"
+                                className="h-8 rounded-lg border-emerald-600/40 px-1.5 text-xs font-semibold text-emerald-700 hover:bg-emerald-50"
                                 onClick={() => void handleMarkPaid(submission)}
                                 disabled={markingPaidId === submission.id}
                               >
@@ -566,7 +591,7 @@ function SubmissionsPage() {
                             <Button
                               type="button"
                               variant="outline"
-                              className="h-8 rounded-lg border-destructive/40 px-2 text-xs font-semibold text-destructive hover:bg-destructive/10"
+                              className="h-8 rounded-lg border-destructive/40 px-1.5 text-xs font-semibold text-destructive hover:bg-destructive/10"
                               onClick={() => void handleDeleteSubmission(submission)}
                               disabled={deletingId === submission.id}
                             >
@@ -587,7 +612,7 @@ function SubmissionsPage() {
             </table>
           </div>
 
-          <div className="grid gap-3 border-b-4 border-primary/20 p-3 lg:hidden">
+          <div className="grid gap-3 border-b-4 border-primary/20 p-3 2xl:hidden">
             {loading ? (
               <div className="px-6 py-12 text-center">
                 <span className="inline-flex items-center gap-2 text-muted-foreground">
