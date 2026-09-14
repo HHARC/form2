@@ -69,6 +69,10 @@ const tableColumns = [...columns, "Actions"];
 const excelColumns = [...columns, "Photo Filename Key", "File URL"];
 const submissionsPassword = import.meta.env.VITE_SUBMISSIONS_PASSWORD || "MaskedCup2026";
 const submissionsAuthKey = "masked-cup-submissions-authenticated";
+const tableHeadClass =
+  "bg-primary px-2 py-3 text-left text-[11px] font-bold uppercase leading-tight text-primary-foreground";
+const tableCellClass =
+  "break-words px-2 py-3 align-middle text-xs leading-snug text-muted-foreground";
 
 function SubmissionsPage() {
   const [password, setPassword] = useState("");
@@ -284,8 +288,8 @@ function SubmissionsPage() {
 
   return (
     <main className="min-h-screen bg-background">
-      <header className="border-b border-border bg-card/95 px-4 py-3 shadow-sm sm:px-8">
-        <div className="mx-auto flex max-w-7xl flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+      <header className="border-b border-border bg-card/95 px-3 py-3 shadow-sm sm:px-5">
+        <div className="mx-auto flex w-full max-w-[1600px] flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           <Link to="/" className="flex items-center gap-3">
             <img src={logoUrl} alt="Event logo" className="h-16 w-24 shrink-0 object-contain" />
             <span className="text-2xl font-black tracking-tight text-foreground">
@@ -304,7 +308,7 @@ function SubmissionsPage() {
         </div>
       </header>
 
-      <section className="mx-auto max-w-7xl px-4 py-8 sm:px-8">
+      <section className="mx-auto w-full max-w-[1600px] px-3 py-8 sm:px-5">
         <div className="flex flex-col gap-5 border-b border-border pb-8 sm:flex-row sm:items-end sm:justify-between">
           <div>
             <div className="mb-4 flex items-center gap-3 text-sm font-semibold text-foreground">
@@ -406,17 +410,13 @@ function SubmissionsPage() {
             </div>
           </div>
 
-          <div className="overflow-x-auto border-b-4 border-primary/20 [background:linear-gradient(to_right,var(--card)_30%,transparent),linear-gradient(to_left,var(--card)_30%,transparent)] [background-attachment:local,local]">
-            <table className="w-full min-w-[2100px] border-collapse text-left text-sm">
+          <div className="hidden border-b-4 border-primary/20 lg:block">
+            <table className="w-full table-fixed border-collapse text-left">
               <caption className="sr-only">The Masked Cup player registration submissions</caption>
               <thead>
                 <tr className="border-b border-border">
                   {tableColumns.map((column) => (
-                    <th
-                      scope="col"
-                      key={column}
-                      className="whitespace-nowrap bg-primary px-4 py-4 text-xs font-bold uppercase tracking-wide text-primary-foreground"
-                    >
+                    <th scope="col" key={column} className={tableHeadClass}>
                       {column}
                     </th>
                   ))}
@@ -461,41 +461,35 @@ function SubmissionsPage() {
 
                     return (
                       <tr key={submission.id} className="border-b border-border last:border-b-0">
-                        <td className="whitespace-nowrap px-4 py-4 align-middle font-bold text-foreground">
+                        <td className={`${tableCellClass} font-bold text-foreground`}>
                           {firstName || fallbackName}
                         </td>
-                        <td className="whitespace-nowrap px-4 py-4 align-middle font-bold text-foreground">
+                        <td className={`${tableCellClass} font-bold text-foreground`}>
                           {lastName || "-"}
                         </td>
-                        <td className="whitespace-nowrap px-4 py-4 align-middle text-muted-foreground">
-                          {submission.email}
-                        </td>
-                        <td className="whitespace-nowrap px-4 py-4 align-middle text-muted-foreground">
-                          {submission.mobile}
-                        </td>
-                        <td className="whitespace-nowrap px-4 py-4 align-middle text-muted-foreground">
+                        <td className={tableCellClass}>{submission.email}</td>
+                        <td className={tableCellClass}>{submission.mobile}</td>
+                        <td className={tableCellClass}>
                           {submission.whatsappNumber ?? submission.whatsapp_number ?? "-"}
                         </td>
-                        <td className="whitespace-nowrap px-4 py-4 align-middle text-muted-foreground">
+                        <td className={tableCellClass}>
                           {submission.jerseyName ?? submission.jersey_name ?? "-"}
                         </td>
-                        <td className="whitespace-nowrap px-4 py-4 align-middle text-muted-foreground">
+                        <td className={tableCellClass}>
                           {submission.jerseySize ?? submission.jersey_size ?? "-"}
                         </td>
-                        <td className="whitespace-nowrap px-4 py-4 align-middle text-muted-foreground">
+                        <td className={tableCellClass}>
                           {submission.jerseyNumber ?? submission.jersey_number ?? "-"}
                         </td>
-                        <td className="whitespace-nowrap px-4 py-4 align-middle text-muted-foreground">
+                        <td className={tableCellClass}>
                           {submission.preferredSleeves ?? submission.preferred_sleeves ?? "-"}
                         </td>
-                        <td className="whitespace-nowrap px-4 py-4 align-middle text-muted-foreground">
+                        <td className={tableCellClass}>
                           {submission.currentClub ?? submission.current_club ?? "-"}
                         </td>
-                        <td className="whitespace-nowrap px-4 py-4 align-middle text-muted-foreground">
-                          {submission.availability ?? "-"}
-                        </td>
-                        <td className="px-4 py-4 align-middle">
-                          <div className="flex max-w-72 flex-wrap gap-1.5">
+                        <td className={tableCellClass}>{submission.availability ?? "-"}</td>
+                        <td className={tableCellClass}>
+                          <div className="flex flex-wrap gap-1.5">
                             {(submission.notAvailableOn ?? submission.not_available_on ?? [])
                               .length > 0 ? (
                               (submission.notAvailableOn ?? submission.not_available_on ?? []).map(
@@ -514,10 +508,10 @@ function SubmissionsPage() {
                             )}
                           </div>
                         </td>
-                        <td className="whitespace-nowrap px-4 py-4 align-middle text-muted-foreground">
+                        <td className={tableCellClass}>
                           {(submission.feeAgreement ?? submission.fee_agreement) ? "Accepted" : "-"}
                         </td>
-                        <td className="whitespace-nowrap px-4 py-4 align-middle">
+                        <td className={tableCellClass}>
                           <Badge
                             className={
                               submission.paymentStatus === "paid"
@@ -530,18 +524,18 @@ function SubmissionsPage() {
                               : "Unpaid — Registration incomplete"}
                           </Badge>
                         </td>
-                        <td className="whitespace-nowrap px-4 py-4 align-middle font-semibold text-primary">
+                        <td className={`${tableCellClass} font-semibold text-primary`}>
                           {submission.franchiseInterest ?? submission.franchise_interest ?? "-"}
                         </td>
-                        <td className="whitespace-nowrap px-4 py-4 align-middle text-muted-foreground">
+                        <td className={tableCellClass}>
                           {formatDateTime(submission.createdAt ?? submission.created_at)}
                         </td>
-                        <td className="whitespace-nowrap px-4 py-4 align-middle">
+                        <td className={tableCellClass}>
                           {fileUrl ? (
                             <Button
                               type="button"
                               variant="ghost"
-                              className="h-9 rounded-xl px-3 text-sm font-semibold"
+                              className="h-8 rounded-lg px-2 text-xs font-semibold"
                               onClick={() => setSelectedFile({ name: displayName, url: fileUrl })}
                             >
                               <Eye className="h-4 w-4" />
@@ -551,13 +545,13 @@ function SubmissionsPage() {
                             <span className="text-muted-foreground">No file</span>
                           )}
                         </td>
-                        <td className="whitespace-nowrap px-4 py-4 align-middle">
-                          <div className="flex items-center gap-2">
+                        <td className={tableCellClass}>
+                          <div className="flex flex-wrap items-center gap-2">
                             {submission.paymentStatus !== "paid" && (
                               <Button
                                 type="button"
                                 variant="outline"
-                                className="h-9 rounded-xl border-emerald-600/40 px-3 text-sm font-semibold text-emerald-700 hover:bg-emerald-50"
+                                className="h-8 rounded-lg border-emerald-600/40 px-2 text-xs font-semibold text-emerald-700 hover:bg-emerald-50"
                                 onClick={() => void handleMarkPaid(submission)}
                                 disabled={markingPaidId === submission.id}
                               >
@@ -572,7 +566,7 @@ function SubmissionsPage() {
                             <Button
                               type="button"
                               variant="outline"
-                              className="h-9 rounded-xl border-destructive/40 px-3 text-sm font-semibold text-destructive hover:bg-destructive/10"
+                              className="h-8 rounded-lg border-destructive/40 px-2 text-xs font-semibold text-destructive hover:bg-destructive/10"
                               onClick={() => void handleDeleteSubmission(submission)}
                               disabled={deletingId === submission.id}
                             >
@@ -591,6 +585,137 @@ function SubmissionsPage() {
                 )}
               </tbody>
             </table>
+          </div>
+
+          <div className="grid gap-3 border-b-4 border-primary/20 p-3 lg:hidden">
+            {loading ? (
+              <div className="px-6 py-12 text-center">
+                <span className="inline-flex items-center gap-2 text-muted-foreground">
+                  <Loader2 className="h-4 w-4 animate-spin" />
+                  Loading submissions
+                </span>
+              </div>
+            ) : submissions.length === 0 ? (
+              <div className="px-6 py-12 text-center text-muted-foreground">
+                No submissions found.
+              </div>
+            ) : filteredSubmissions.length === 0 ? (
+              <div className="px-6 py-12 text-center text-muted-foreground">
+                No submissions match your search.
+              </div>
+            ) : (
+              filteredSubmissions.map((submission) => {
+                const firstName = submission.firstName ?? submission.first_name ?? "";
+                const lastName = submission.lastName ?? submission.last_name ?? "";
+                const fallbackName = submission.fullName ?? submission.full_name ?? "Unknown";
+                const displayName = [firstName, lastName].filter(Boolean).join(" ") || fallbackName;
+                const fileUrl = getFileUrl(submission);
+
+                return (
+                  <article
+                    key={submission.id}
+                    className="rounded-xl border border-border bg-background p-4"
+                  >
+                    <div className="flex flex-wrap items-start justify-between gap-3">
+                      <div>
+                        <h2 className="text-base font-black text-foreground">{displayName}</h2>
+                        <p className="mt-1 break-words text-sm text-muted-foreground">
+                          {submission.email}
+                        </p>
+                        <p className="text-sm text-muted-foreground">{submission.mobile}</p>
+                      </div>
+                      <Badge
+                        className={
+                          submission.paymentStatus === "paid"
+                            ? "bg-emerald-600 text-white hover:bg-emerald-600"
+                            : "bg-amber-500 text-black hover:bg-amber-500"
+                        }
+                      >
+                        {submission.paymentStatus === "paid"
+                          ? "Paid â€” Registered"
+                          : "Unpaid â€” Registration incomplete"}
+                      </Badge>
+                    </div>
+
+                    <div className="mt-4 grid grid-cols-2 gap-3 text-sm">
+                      <MobileField
+                        label="Jersey"
+                        value={[
+                          submission.jerseyName ?? submission.jersey_name,
+                          submission.jerseyNumber ?? submission.jersey_number,
+                          submission.jerseySize ?? submission.jersey_size,
+                        ]
+                          .filter(Boolean)
+                          .join(" / ")}
+                      />
+                      <MobileField
+                        label="Sleeves"
+                        value={submission.preferredSleeves ?? submission.preferred_sleeves}
+                      />
+                      <MobileField
+                        label="Club"
+                        value={submission.currentClub ?? submission.current_club}
+                      />
+                      <MobileField label="Availability" value={submission.availability} />
+                      <MobileField
+                        label="Franchise"
+                        value={submission.franchiseInterest ?? submission.franchise_interest}
+                      />
+                      <MobileField
+                        label="Created"
+                        value={formatDateTime(submission.createdAt ?? submission.created_at)}
+                      />
+                    </div>
+
+                    <div className="mt-4 flex flex-wrap items-center gap-2">
+                      {fileUrl ? (
+                        <Button
+                          type="button"
+                          variant="ghost"
+                          className="h-8 rounded-lg px-2 text-xs font-semibold"
+                          onClick={() => setSelectedFile({ name: displayName, url: fileUrl })}
+                        >
+                          <Eye className="h-4 w-4" />
+                          View
+                        </Button>
+                      ) : (
+                        <span className="text-sm text-muted-foreground">No file</span>
+                      )}
+                      {submission.paymentStatus !== "paid" && (
+                        <Button
+                          type="button"
+                          variant="outline"
+                          className="h-8 rounded-lg border-emerald-600/40 px-2 text-xs font-semibold text-emerald-700 hover:bg-emerald-50"
+                          onClick={() => void handleMarkPaid(submission)}
+                          disabled={markingPaidId === submission.id}
+                        >
+                          {markingPaidId === submission.id ? (
+                            <Loader2 className="h-4 w-4 animate-spin" />
+                          ) : (
+                            <CheckCircle2 className="h-4 w-4" />
+                          )}
+                          Mark paid
+                        </Button>
+                      )}
+                      <Button
+                        type="button"
+                        variant="outline"
+                        className="h-8 rounded-lg border-destructive/40 px-2 text-xs font-semibold text-destructive hover:bg-destructive/10"
+                        onClick={() => void handleDeleteSubmission(submission)}
+                        disabled={deletingId === submission.id}
+                      >
+                        {deletingId === submission.id ? (
+                          <Loader2 className="h-4 w-4 animate-spin" />
+                        ) : (
+                          <Trash2 className="h-4 w-4" />
+                        )}
+                        Delete
+                      </Button>
+                    </div>
+                  </article>
+                );
+              })
+            )}
           </div>
         </div>
       </section>
@@ -625,6 +750,15 @@ function Stat({ label, value }: { label: string; value: string }) {
     <div className="rounded-xl border border-border bg-card px-4 py-2.5">
       <p className="text-xs font-semibold text-muted-foreground">{label}</p>
       <p className="text-lg font-black text-foreground">{value}</p>
+    </div>
+  );
+}
+
+function MobileField({ label, value }: { label: string; value?: string | null }) {
+  return (
+    <div className="min-w-0">
+      <p className="text-xs font-bold uppercase text-muted-foreground">{label}</p>
+      <p className="mt-1 break-words font-semibold text-foreground">{value || "-"}</p>
     </div>
   );
 }
