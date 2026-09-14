@@ -1,10 +1,12 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import {
   CalendarDays,
+  CheckCircle2,
   Download,
   Eye,
   FileArchive,
   FileImage,
+  KeyRound,
   Loader2,
   RefreshCcw,
   Search,
@@ -12,7 +14,7 @@ import {
   Trash2,
   X,
 } from "lucide-react";
-import { useEffect, useMemo, useState } from "react";
+import { type FormEvent, useEffect, useMemo, useState } from "react";
 
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Badge } from "@/components/ui/badge";
@@ -65,13 +67,22 @@ const columns = [
 
 const tableColumns = [...columns, "Actions"];
 const excelColumns = [...columns, "Photo Filename Key", "File URL"];
+const submissionsPassword = import.meta.env.VITE_SUBMISSIONS_PASSWORD || "MaskedCup2026";
+const submissionsAuthKey = "masked-cup-submissions-authenticated";
 
 function SubmissionsPage() {
+  const [password, setPassword] = useState("");
+  const [passwordError, setPasswordError] = useState<string | null>(null);
+  const [isUnlocked, setIsUnlocked] = useState(() => {
+    if (typeof window === "undefined") return false;
+    return window.sessionStorage.getItem(submissionsAuthKey) === "true";
+  });
   const [submissions, setSubmissions] = useState<RegistrationSubmission[]>([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [loading, setLoading] = useState(true);
   const [downloadingPhotos, setDownloadingPhotos] = useState(false);
   const [deletingId, setDeletingId] = useState<string | number | null>(null);
+  const [markingPaidId, setMarkingPaidId] = useState<string | number | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [selectedFile, setSelectedFile] = useState<{
     name: string;
@@ -103,8 +114,21 @@ function SubmissionsPage() {
   }
 
   useEffect(() => {
-    void loadSubmissions();
-  }, []);
+    if (isUnlocked) void loadSubmissions();
+    else setLoading(false);
+  }, [isUnlocked]);
+
+  function handleUnlock(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    if (password !== submissionsPassword) {
+      setPasswordError("Incorrect password.");
+      return;
+    }
+
+    window.sessionStorage.setItem(submissionsAuthKey, "true");
+    setPasswordError(null);
+    setIsUnlocked(true);
+  }
 
   async function handleDownloadPhotos() {
     setDownloadingPhotos(true);
@@ -156,6 +180,52 @@ function SubmissionsPage() {
     }
   }
 
+  async function handleMarkPaid(submission: RegistrationSubmission) {
+    const name = getSubmissionName(submission);
+    const confirmed = window.confirm(`Mark ${name} as paid and registered?`);
+    if (!confirmed) return;
+
+    setMarkingPaidId(submission.id);
+    setError(null);
+
+    try {
+      const response = await fetch(
+        `${API_BASE_URL}/api/registrations/${encodeURIComponent(String(submission.id))}/mark-paid`,
+        { method: "PATCH" },
+      );
+      const payload = (await response.json().catch(() => null)) as {
+        message?: string;
+        registration?: RegistrationSubmission;
+      } | null;
+
+      if (!response.ok) {
+        throw new Error(payload?.message ?? "Could not mark this submission as paid.");
+      }
+
+      setSubmissions((currentSubmissions) =>
+        currentSubmissions.map((currentSubmission) =>
+          currentSubmission.id === submission.id
+            ? {
+                ...currentSubmission,
+                ...(payload?.registration ?? {}),
+                paymentStatus: "paid",
+                paidAt: payload?.registration?.paidAt ?? new Date().toISOString(),
+              }
+            : currentSubmission,
+        ),
+      );
+    } catch (markPaidError) {
+      console.error(markPaidError);
+      setError(
+        markPaidError instanceof Error
+          ? markPaidError.message
+          : "Could not mark this submission as paid.",
+      );
+    } finally {
+      setMarkingPaidId(null);
+    }
+  }
+
   const totalFiles = useMemo(
     () => submissions.filter((submission) => getFileUrl(submission)).length,
     [submissions],
@@ -173,6 +243,44 @@ function SubmissionsPage() {
     [filteredSubmissions],
   );
   const hasSearchQuery = searchQuery.trim().length > 0;
+  if (!isUnlocked) {
+    return (
+      <main className="flex min-h-screen items-center justify-center bg-background px-4">
+        <form
+          onSubmit={handleUnlock}
+          className="w-full max-w-sm rounded-2xl border border-border bg-card p-6 shadow-[var(--shadow-soft)]"
+        >
+          <div className="mb-5 flex items-center gap-3">
+            <span className="inline-flex h-10 w-10 items-center justify-center rounded-xl border border-border bg-background">
+              <KeyRound className="h-5 w-5 text-primary" />
+            </span>
+            <div>
+              <h1 className="text-xl font-black text-foreground">Submissions locked</h1>
+              <p className="text-sm text-muted-foreground">Enter password to continue.</p>
+            </div>
+          </div>
+
+          <Input
+            type="password"
+            value={password}
+            onChange={(event) => {
+              setPassword(event.target.value);
+              setPasswordError(null);
+            }}
+            placeholder="Password"
+            className="h-11 rounded-xl"
+            autoFocus
+          />
+          {passwordError && (
+            <p className="mt-2 text-sm font-semibold text-destructive">{passwordError}</p>
+          )}
+          <Button type="submit" className="mt-4 h-11 w-full rounded-xl">
+            Unlock
+          </Button>
+        </form>
+      </main>
+    );
+  }
 
   return (
     <main className="min-h-screen bg-background">
@@ -300,9 +408,7 @@ function SubmissionsPage() {
 
           <div className="overflow-x-auto border-b-4 border-primary/20 [background:linear-gradient(to_right,var(--card)_30%,transparent),linear-gradient(to_left,var(--card)_30%,transparent)] [background-attachment:local,local]">
             <table className="w-full min-w-[2100px] border-collapse text-left text-sm">
-              <caption className="sr-only">
-                The Masked Cup player registration submissions
-              </caption>
+              <caption className="sr-only">The Masked Cup player registration submissions</caption>
               <thead>
                 <tr className="border-b border-border">
                   {tableColumns.map((column) => (
@@ -446,20 +552,38 @@ function SubmissionsPage() {
                           )}
                         </td>
                         <td className="whitespace-nowrap px-4 py-4 align-middle">
-                          <Button
-                            type="button"
-                            variant="outline"
-                            className="h-9 rounded-xl border-destructive/40 px-3 text-sm font-semibold text-destructive hover:bg-destructive/10"
-                            onClick={() => void handleDeleteSubmission(submission)}
-                            disabled={deletingId === submission.id}
-                          >
-                            {deletingId === submission.id ? (
-                              <Loader2 className="h-4 w-4 animate-spin" />
-                            ) : (
-                              <Trash2 className="h-4 w-4" />
+                          <div className="flex items-center gap-2">
+                            {submission.paymentStatus !== "paid" && (
+                              <Button
+                                type="button"
+                                variant="outline"
+                                className="h-9 rounded-xl border-emerald-600/40 px-3 text-sm font-semibold text-emerald-700 hover:bg-emerald-50"
+                                onClick={() => void handleMarkPaid(submission)}
+                                disabled={markingPaidId === submission.id}
+                              >
+                                {markingPaidId === submission.id ? (
+                                  <Loader2 className="h-4 w-4 animate-spin" />
+                                ) : (
+                                  <CheckCircle2 className="h-4 w-4" />
+                                )}
+                                Mark paid
+                              </Button>
                             )}
-                            Delete
-                          </Button>
+                            <Button
+                              type="button"
+                              variant="outline"
+                              className="h-9 rounded-xl border-destructive/40 px-3 text-sm font-semibold text-destructive hover:bg-destructive/10"
+                              onClick={() => void handleDeleteSubmission(submission)}
+                              disabled={deletingId === submission.id}
+                            >
+                              {deletingId === submission.id ? (
+                                <Loader2 className="h-4 w-4 animate-spin" />
+                              ) : (
+                                <Trash2 className="h-4 w-4" />
+                              )}
+                              Delete
+                            </Button>
+                          </div>
                         </td>
                       </tr>
                     );

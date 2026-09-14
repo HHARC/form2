@@ -35,6 +35,7 @@ type RegistrationRow =
       original_photo_name?: string;
       created_at?: string;
       payment_status?: "unpaid" | "paid" | "failed" | "expired";
+      paid_at?: string;
     }
   | null
   | undefined;
@@ -130,6 +131,32 @@ async function handleApiRequest(request: Request): Promise<Response | null> {
     const collection = await getRegistrationsCollection();
     const docs = await collection.find().sort({ _id: -1 }).limit(50).toArray();
     return json(200, { ok: true, registrations: docs.map(formatRegistration) });
+  }
+
+  if (request.method === "PATCH" && /^\/api\/registrations\/[^/]+\/mark-paid$/.test(url.pathname)) {
+    const id = decodeURIComponent(
+      url.pathname.replace(/^\/api\/registrations\//, "").replace(/\/mark-paid$/, ""),
+    );
+    if (!ObjectId.isValid(id)) {
+      return json(404, { ok: false, message: "Submission not found." });
+    }
+
+    const collection = await getRegistrationsCollection();
+    const paidAt = new Date().toISOString();
+    const result = await collection.findOneAndUpdate(
+      { _id: new ObjectId(id) },
+      { $set: { payment_status: "paid", paid_at: paidAt } },
+      { returnDocument: "after" },
+    );
+    if (!result) {
+      return json(404, { ok: false, message: "Submission not found." });
+    }
+
+    return json(200, {
+      ok: true,
+      message: "Submission marked as paid.",
+      registration: formatRegistration(result),
+    });
   }
 
   if (request.method === "DELETE" && url.pathname.startsWith("/api/registrations/")) {
@@ -358,6 +385,7 @@ function formatRegistration(row: RegistrationRow) {
     photoPath: row?.photo_path,
     originalPhotoName: row?.original_photo_name,
     paymentStatus: row?.payment_status ?? "unpaid",
+    paidAt: row?.paid_at,
     createdAt: row?.created_at,
   };
 }
@@ -403,7 +431,7 @@ function json(status: number, payload: unknown) {
 function corsHeaders() {
   return {
     "access-control-allow-origin": "*",
-    "access-control-allow-methods": "GET,POST,DELETE,OPTIONS",
+    "access-control-allow-methods": "GET,POST,PATCH,DELETE,OPTIONS",
     "access-control-allow-headers": "Content-Type, Accept",
   };
 }
