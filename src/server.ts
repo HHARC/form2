@@ -133,7 +133,10 @@ async function handleApiRequest(request: Request): Promise<Response | null> {
     return json(200, { ok: true, registrations: docs.map(formatRegistration) });
   }
 
-  if (request.method === "PATCH" && /^\/api\/registrations\/[^/]+\/mark-paid$/.test(url.pathname)) {
+  if (
+    (request.method === "PATCH" || request.method === "POST") &&
+    /^\/api\/registrations\/[^/]+\/mark-paid$/.test(url.pathname)
+  ) {
     const id = decodeURIComponent(
       url.pathname.replace(/^\/api\/registrations\//, "").replace(/\/mark-paid$/, ""),
     );

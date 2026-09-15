@@ -215,7 +215,7 @@ function SubmissionsPage() {
     try {
       const response = await fetch(
         `${API_BASE_URL}/api/registrations/${encodeURIComponent(String(submission.id))}/mark-paid`,
-        { method: "PATCH" },
+        { method: "POST" },
       );
       const payload = (await response.json().catch(() => null)) as {
         message?: string;
