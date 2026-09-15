@@ -242,7 +242,9 @@ function SubmissionsPage() {
       console.error(markPaidError);
       setError(
         markPaidError instanceof Error
-          ? markPaidError.message
+          ? markPaidError.message === "Failed to fetch"
+            ? "Could not reach the server to mark this player as paid."
+            : markPaidError.message
           : "Could not mark this submission as paid.",
       );
     } finally {
