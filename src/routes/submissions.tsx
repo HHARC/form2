@@ -4,6 +4,7 @@ import {
   CheckCircle2,
   Download,
   Eye,
+  EyeOff,
   FileArchive,
   FileImage,
   KeyRound,
@@ -96,6 +97,7 @@ const tableColumnWidths = [
 
 function SubmissionsPage() {
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const [passwordError, setPasswordError] = useState<string | null>(null);
   const [isUnlocked, setIsUnlocked] = useState(() => {
     if (typeof window === "undefined") return false;
@@ -286,17 +288,27 @@ function SubmissionsPage() {
             </div>
           </div>
 
-          <Input
-            type="password"
-            value={password}
-            onChange={(event) => {
-              setPassword(event.target.value);
-              setPasswordError(null);
-            }}
-            placeholder="Password"
-            className="h-11 rounded-xl"
-            autoFocus
-          />
+          <div className="relative">
+            <Input
+              type={showPassword ? "text" : "password"}
+              value={password}
+              onChange={(event) => {
+                setPassword(event.target.value);
+                setPasswordError(null);
+              }}
+              placeholder="Password"
+              className="h-11 rounded-xl pr-11"
+              autoFocus
+            />
+            <button
+              type="button"
+              onClick={() => setShowPassword((currentValue) => !currentValue)}
+              className="absolute right-3 top-1/2 inline-flex -translate-y-1/2 text-muted-foreground transition-colors hover:text-foreground"
+              aria-label={showPassword ? "Hide password" : "Show password"}
+            >
+              {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
+            </button>
+          </div>
           {passwordError && (
             <p className="mt-2 text-sm font-semibold text-destructive">{passwordError}</p>
           )}
