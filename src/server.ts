@@ -53,7 +53,7 @@ const MONGODB_DB = process.env.MONGODB_DB ?? "registrations_db";
 const JERSEY_SIZES = new Set(["Small", "Medium", "Large", "XL", "XXL", "3XL", "4XL"]);
 const PREFERRED_SLEEVES = new Set(["Full Sleeves", "Half Sleeves"]);
 const AVAILABILITY_OPTIONS = new Set(["Available all matches", "Missing few matches"]);
-const REGISTRATION_OPEN = false;
+const REGISTRATION_OPEN = true;
 const REGISTRATION_CLOSED_MESSAGE =
   "Registration for The Masked Cup is closed. Please get ready early next time because spots move fast.";
 const PLAYER_GALLERY_SOURCE = "https://api.stride-events.net";

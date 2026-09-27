@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 
-import { RegistrationClosed } from "@/components/registration/RegistrationClosed";
+import { RegistrationForm } from "@/components/registration/RegistrationForm";
 import { RegistrationPageShell } from "@/components/registration/RegistrationPageShell";
 
 export const Route = createFileRoute("/private-registration-7h4k9m")({
@@ -20,7 +20,7 @@ export const Route = createFileRoute("/private-registration-7h4k9m")({
 function PrivateRegistration() {
   return (
     <RegistrationPageShell>
-      <RegistrationClosed />
+      <RegistrationForm submitPath="/api/private-registration-7h4k9m" />
     </RegistrationPageShell>
   );
 }
