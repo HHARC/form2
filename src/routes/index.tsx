@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 
-import { RegistrationForm } from "@/components/registration/RegistrationForm";
+import { RegistrationClosed } from "@/components/registration/RegistrationClosed";
 import { RegistrationPageShell } from "@/components/registration/RegistrationPageShell";
 
 export const Route = createFileRoute("/")({
@@ -19,7 +19,7 @@ export const Route = createFileRoute("/")({
 function Index() {
   return (
     <RegistrationPageShell>
-      <RegistrationForm submitPath="/api/registrations" />
+      <RegistrationClosed />
     </RegistrationPageShell>
   );
 }
